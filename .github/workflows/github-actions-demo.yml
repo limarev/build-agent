@@ -25,3 +25,10 @@ jobs:
         run: |
           ls ${{ github.workspace }}
       - run: echo "🍏 This job's status is ${{ job.status }}."
+      - name: Upload binaries to release
+        uses: svenstaro/upload-release-action@v2
+        with:
+          file: LICENSE
+          asset_name: mything_$tag
+          overwrite: true
+          body: "This is my release $tag"
