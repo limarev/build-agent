@@ -32,6 +32,6 @@ jobs:
         uses: svenstaro/upload-release-action@2.7.0
         with:
           file: archive.tar.gz
-          asset_name: mything_$tag
+          asset_name: mything_$tag.tar.gz
           overwrite: true
           body: "This is my release $tag"
