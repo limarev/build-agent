@@ -31,6 +31,9 @@ jobs:
           docker pull hello-world
           docker run hello-world
           ls ${{ github.workspace }}
+      - name: Test dockerization
+        uses: docker://hello-world:latest
+
       - name: Build
         uses: docker://klimarev/lo_co_build_env:1.2
         with:
