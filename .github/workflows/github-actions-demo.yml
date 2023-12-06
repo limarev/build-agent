@@ -2,9 +2,9 @@ name: Publishing
 run-name: Publish new libreoffice release ${{ github.ref_name }}
 
 on:
-  [push]
-    # tags:
-    #   - '*'
+  push:
+    tags:
+      - '*'
 
 env: 
   REPO: LibreOffice/core
@@ -22,12 +22,21 @@ jobs:
           ref: ${{ github.ref_name }}
           submodules: 'recursive'
           path: './core'
-      - run: |
+      - name: Build info
+        run: |
           echo "🎉 The job was automatically triggered by a ${{ github.event_name }} event."
           echo "🐧 This job is now running on a ${{ runner.os }} server!"
           echo "🔎 This job builds $REPO repository ${{ github.ref_name }} tag for adnroid."
           ls ${{ github.workspace }}
-      - run: |
+      - name: Build
+        uses: docker://klimarev/lo_co_build_env:1.0
+        with:
+          args: |
+            -v ${{ github.workspace }}/core:/home/user/build
+            CPAndroidX86_64
+
+      - name: Archive android_* artifacts
+        run: |
           tar czvf android_armeabi-v7a_core_${{ github.ref_name }}.tar.gz core
           tar czvf android_arm64-v8a_core_${{ github.ref_name }}.tar.gz LICENSE
           tar czvf android_x86_core_${{ github.ref_name }}.tar.gz LICENSE
