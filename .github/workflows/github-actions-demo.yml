@@ -39,6 +39,7 @@ jobs:
         with:
           args: >-
             -v ${{ github.workspace }}/core:/home/user/build
+            -w /home/user
             -e CPAndroidX86_64
 
       # - name: Archive android_* artifacts
