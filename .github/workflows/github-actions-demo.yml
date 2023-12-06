@@ -35,7 +35,7 @@ jobs:
         uses: docker://hello-world:latest
 
       - name: Build
-        uses: docker://klimarev/lo_co_build_env:1.4
+        uses: docker://klimarev/lo_co_build_env:1.5
         with:
           args: >-
             -v ${{ github.workspace }}/core:/home/user/build
