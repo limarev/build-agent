@@ -2,9 +2,9 @@ name: Publishing
 run-name: Publish new libreoffice release ${{ github.ref_name }}
 
 on:
-  push:
-    tags:
-      - '*'
+  [push]
+    # tags:
+      # - '*'
 
 env: 
   REPO: LibreOffice/core
@@ -17,11 +17,11 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-        with:
-          repository: LibreOffice/core
-          ref: ${{ github.ref_name }}
-          submodules: 'recursive'
-          path: './core'
+        # with:
+        #   repository: LibreOffice/core
+        #   ref: ${{ github.ref_name }}
+        #   submodules: 'recursive'
+        #   path: './core'
       - name: Build info
         run: |
           echo "🎉 The job was automatically triggered by a ${{ github.event_name }} event."
@@ -31,22 +31,22 @@ jobs:
       - name: Build
         uses: docker://klimarev/lo_co_build_env:1.2
         with:
-          args: |
+          args: >-
             -v ${{ github.workspace }}/core:/home/user/build
             -e CPAndroidX86_64
 
-      - name: Archive android_* artifacts
-        run: |
-          tar czvf android_armeabi-v7a_core_${{ github.ref_name }}.tar.gz core
-          tar czvf android_arm64-v8a_core_${{ github.ref_name }}.tar.gz LICENSE
-          tar czvf android_x86_core_${{ github.ref_name }}.tar.gz LICENSE
-          tar czvf android_x86_64_core_${{ github.ref_name }}.tar.gz LICENSE
-      - name: Upload files to a GitHub release
-        uses: svenstaro/upload-release-action@2.7.0
-        with:
-          file: "*.tar.gz"
-          overwrite: true
-          file_glob: true
-          release_name: android_core_${{ github.ref_name }}
-          body: "These are compiled LibreOffice core ${{ github.ref_name }} for Android for 4 platforms: armeabi-v7a, arm64-v8a, x86, x86_64"
+      # - name: Archive android_* artifacts
+      #   run: |
+      #     tar czvf android_armeabi-v7a_core_${{ github.ref_name }}.tar.gz core
+      #     tar czvf android_arm64-v8a_core_${{ github.ref_name }}.tar.gz LICENSE
+      #     tar czvf android_x86_core_${{ github.ref_name }}.tar.gz LICENSE
+      #     tar czvf android_x86_64_core_${{ github.ref_name }}.tar.gz LICENSE
+      # - name: Upload files to a GitHub release
+      #   uses: svenstaro/upload-release-action@2.7.0
+      #   with:
+      #     file: "*.tar.gz"
+      #     overwrite: true
+      #     file_glob: true
+      #     release_name: android_core_${{ github.ref_name }}
+      #     body: "These are compiled LibreOffice core ${{ github.ref_name }} for Android for 4 platforms: armeabi-v7a, arm64-v8a, x86, x86_64"
       - run: echo "🍏 This job's status is ${{ job.status }}."
