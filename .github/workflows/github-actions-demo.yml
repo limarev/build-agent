@@ -1,5 +1,5 @@
 name: Publish
-run-name: Publish new libreoffice release
+run-name: Publish new libreoffice release ${{ github.ref_name }}
 
 on:
   [push]
@@ -27,12 +27,17 @@ jobs:
           echo "🐧 This job is now running on a ${{ runner.os }} server!"
           echo "🔎 This job builds $REPO repository ${{ github.ref_name }} tag for adnroid."
           ls ${{ github.workspace }}
-      - run: echo "🍏 This job's status is ${{ job.status }}."
-      - run: tar czvf archive.tar.gz core
+      - run: |
+          tar czvf android_armeabi-v7a_core_${{ github.ref_name }}.tar.gz core
+          tar czvf android_arm64-v8a_core_${{ github.ref_name }}.tar.gz LICENSE
+          tar czvf android_x86_core_${{ github.ref_name }}.tar.gz LICENSE
+          tar czvf android_x86_64_core_${{ github.ref_name }}.tar.gz LICENSE
       - name: Upload files to a GitHub release      
         uses: svenstaro/upload-release-action@2.7.0
         with:
-          file: archive.tar.gz
-          asset_name: android_armeabi-v7a_core_${{ github.ref_name }}.tar.gz
+          file: *.tar.gz
+          file_glob: true
           overwrite: true
-          body: "These are LibreOffice binaries ${{ github.ref_name }} compiled for Android for 4 platforms: armeabi-v7a, arm64-v8a, x86, x86_64"
+          release_name: android_core_${{ github.ref_name }}
+          body: "These are compiled LibreOffice core ${{ github.ref_name }} for Android for 4 platforms: armeabi-v7a, arm64-v8a, x86, x86_64"
+      - run: echo "🍏 This job's status is ${{ job.status }}."
