@@ -35,7 +35,7 @@ jobs:
           whoami
           pwd
           ls -la /home/user/build
-          mkdir android_armeabi-v7a_core_${{ github.ref_name }}
+          mkdir -p android_armeabi-v7a_core_${{ github.ref_name }}
           cd android_armeabi-v7a_core_${{ github.ref_name }}
           /home/user/build/entrypoint.sh CPAndroid
 
