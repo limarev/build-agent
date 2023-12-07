@@ -12,6 +12,8 @@ env:
 jobs:
   build:
     runs-on: self-hosted
+    container:
+      image: klimarev/lo_co_build_env:1.5
     permissions:
       contents: write
     steps:
@@ -29,12 +31,6 @@ jobs:
           echo "🔎 This job builds $REPO repository ${{ github.ref_name }} tag for adnroid."
           whoami
           ls ${{ github.workspace }}
-
-      - name: Build
-        uses: addnab/docker-run-action@v3
-        with:
-          image: hello-world
-          # options: CPAndroidX86_64
 
       # - name: Archive android_* artifacts
       #   run: |
