@@ -31,16 +31,12 @@ jobs:
           docker pull hello-world
           docker run hello-world
           ls ${{ github.workspace }}
-      - name: Test dockerization
-        uses: docker://hello-world:latest
 
       - name: Build
-        uses: docker://klimarev/lo_co_build_env:1.5
+        uses: addnab/docker-run-action@v3
         with:
-          args: >-
-            -v ${{ github.workspace }}/core:/home/user/build
-            -w /home/user
-            CPAndroidX86_64
+          image: klimarev/lo_co_build_env:1.5
+          options: -v ${{ github.workspace }}/core:/home/user/build -w /home/user CPAndroidX86_64
 
       # - name: Archive android_* artifacts
       #   run: |
