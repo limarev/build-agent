@@ -22,11 +22,11 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-        # with:
-        #   repository: LibreOffice/core
-        #   ref: ${{ github.ref_name }}
-        #   submodules: 'recursive'
-        #   path: './core'
+        with:
+          repository: LibreOffice/core
+          ref: ${{ github.ref_name }}
+          submodules: 'recursive'
+          path: './core'
       - name: Build info
         run: |
           echo "🎉 The job was automatically triggered by a ${{ github.event_name }} event."
