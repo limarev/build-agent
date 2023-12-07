@@ -24,7 +24,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           repository: LibreOffice/core
-          ref: ${{ github.ref_name }}
+          ref: co-23.05.6-2
           submodules: 'recursive'
           path: './core'
       - name: Build info
