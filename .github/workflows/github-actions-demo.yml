@@ -34,7 +34,7 @@ jobs:
         uses: addnab/docker-run-action@v3
         with:
           image: klimarev/lo_co_build_env:1.5
-          options: -v "${{ github.workspace }}/core:/home/user/build" -w /home/user CPAndroidX86_64
+          options: CPAndroidX86_64
 
       # - name: Archive android_* artifacts
       #   run: |
