@@ -14,7 +14,7 @@ jobs:
     runs-on: self-hosted
     container:
       image: klimarev/lo_co_build_env:1.5
-      options: --user user
+      options: --user user -v ${{ github.workspace }}:/home/user/build
     permissions:
       contents: write
     steps:
@@ -32,7 +32,7 @@ jobs:
           echo "🔎 This job builds $REPO repository ${{ github.ref_name }} tag for adnroid."
           whoami
           pwd
-          ls ${{ github.workspace }}
+          ls -la /home/user/build
 
       # - name: Archive android_* artifacts
       #   run: |

@@ -1,7 +1,7 @@
 #!/bin/bash
 
 set -x
-
+# TODO change workspace?
 workspace=/home/user
 
 function build_collabora {
