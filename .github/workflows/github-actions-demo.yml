@@ -31,6 +31,7 @@ jobs:
           echo "🐧 This job is now running on a ${{ runner.os }} server!"
           echo "🔎 This job builds $REPO repository ${{ github.ref_name }} tag for adnroid."
           whoami
+          pwd
           ls ${{ github.workspace }}
 
       # - name: Archive android_* artifacts
