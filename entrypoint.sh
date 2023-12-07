@@ -41,13 +41,10 @@ function build {
     --with-android-ndk=${ANDROID_NDK_PATH}
     --with-android-sdk=${ANDROID_SDK_PATH}
     --with-distro=$1
-    --disable-ccache" > autogen.input
+    --disable-ccache" > ${LIBREOFFICE_SOURCES_DIR}/autogen.input
     make distclean
-    ./autogen.sh && make
+    ${LIBREOFFICE_SOURCES_DIR}/autogen.sh && make
 }
-
-pwd
-cd $workspace/build
 
 case $1 in
     "fetch")

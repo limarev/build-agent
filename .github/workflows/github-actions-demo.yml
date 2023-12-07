@@ -14,7 +14,9 @@ jobs:
     runs-on: self-hosted
     container:
       image: klimarev/lo_co_build_env:1.5
-      options: --user user -v ${{ github.workspace }}:/home/user/build
+      options: --user user -v ${{ github.workspace }}:/home/user/build --workdir /home/user/build
+      env:
+        LIBREOFFICE_SOURCES_DIR: /home/user/build/core
     permissions:
       contents: write
     steps:
@@ -33,6 +35,10 @@ jobs:
           whoami
           pwd
           ls -la /home/user/build
+          mkdir android_armeabi-v7a_core_${{ github.ref_name }}
+          cd android_armeabi-v7a_core_${{ github.ref_name }}
+          /home/user/build/entrypoint.sh CPAndroid
+
 
       # - name: Archive android_* artifacts
       #   run: |
