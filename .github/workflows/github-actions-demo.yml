@@ -28,15 +28,13 @@ jobs:
           echo "🐧 This job is now running on a ${{ runner.os }} server!"
           echo "🔎 This job builds $REPO repository ${{ github.ref_name }} tag for adnroid."
           whoami
-          docker pull hello-world
-          docker run hello-world
           ls ${{ github.workspace }}
 
       - name: Build
         uses: addnab/docker-run-action@v3
         with:
           image: klimarev/lo_co_build_env:1.5
-          options: -v ${{ github.workspace }}/core:/home/user/build -w /home/user CPAndroidX86_64
+          options: -v "${{ github.workspace }}/core:/home/user/build" -w /home/user CPAndroidX86_64
 
       # - name: Archive android_* artifacts
       #   run: |
