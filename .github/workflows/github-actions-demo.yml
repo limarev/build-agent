@@ -2,9 +2,9 @@ name: Publishing
 run-name: Publish new libreoffice release ${{ github.ref_name }}
 
 on:
-  push:
-    tags:
-      - '*'
+  [push]
+    # tags:
+      # - '*'
 
 jobs:
   build:
@@ -40,6 +40,7 @@ jobs:
       - name: Build ${{ env.target }}
         run: |
           mkdir -p ${{ env.target }} && cd ${{ env.target }}
+          echo $LIBREOFFICE_SOURCES_DIR
           ./../entrypoint.sh ${{ matrix.arch }}
         env:
           LIBREOFFICE_SOURCES_DIR: ./../core
