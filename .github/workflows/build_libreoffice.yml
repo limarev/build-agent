@@ -40,6 +40,7 @@ jobs:
           echo "This job is run from $(whoami)"
           echo "Current directory is $(pwd)"
           echo "Current directory structure: $(ls -la)"
+          echo "LibreOffice core directory size: $(du -sh core)"
 
       - name: Build ${{ env.target }}
         run: |
@@ -49,11 +50,13 @@ jobs:
           LIBREOFFICE_SOURCES_DIR: ./../core
 
       - name: Check if ${{ env.target }} contains build files
-        run: ls -la ${{ env.target }}
+        run: |
+          du -sh ${{ env.target }}
+          ls -la ${{ env.target }}
 
       - name: Archive android_* artifacts
         run: |
-          tar czvf ${{ env.target }}.tar.gz ${{ env.target }}
+          tar czf --totals ${{ env.target }}.tar.gz ${{ env.target }}
 
       - name: Upload files to a GitHub release
         uses: svenstaro/upload-release-action@2.7.0
