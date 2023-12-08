@@ -2,12 +2,9 @@ name: Publishing
 run-name: Publish new libreoffice release ${{ github.ref_name }}
 
 on:
-  [push]
-    # tags:
-      # - '*'
-
-env: 
-  REPO: LibreOffice/core
+  push:
+    tags:
+      - '*'
 
 jobs:
   build:
@@ -18,25 +15,24 @@ jobs:
     container:
       image: klimarev/lo_co_build_env:1.5
       options: --user user
-      env:
-        LIBREOFFICE_SOURCES_DIR: .
     env:
       target: android_${{ matrix.arch }}_core_${{ github.ref_name }}
+      lo_repo: LibreOffice/core
     permissions:
       contents: write
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-        # with:
-        #   repository: LibreOffice/core
-        #   ref: co-23.05.6-2
-        #   submodules: 'recursive'
-        #   path: './core'
+        with:
+          repository: ${{ env.lo_repo }}
+          ref: co-23.05.6-2
+          submodules: 'recursive'
+          path: './core'
       - name: Build info 
         run: |
           echo "🎉 The job was automatically triggered by a ${{ github.event_name }} event."
           echo "🐧 This job is now running on a ${{ runner.os }} server!"
-          echo "🔎 This job builds $REPO repository ${{ github.ref_name }} tag for adnroid."
+          echo "🔎 This job builds ${{ env.lo_repo }} repository ${{ github.ref_name }} tag for adnroid."
           echo "This job is run from $(whoami)"
           echo "Current directory is $(pwd)"
           echo "Current directory structure: $(ls -la)"
@@ -45,6 +41,8 @@ jobs:
         run: |
           mkdir -p ${{ env.target }} && cd ${{ env.target }}
           ./../entrypoint.sh ${{ matrix.arch }}
+        env:
+          LIBREOFFICE_SOURCES_DIR: ./../core
 
       - name: Check if ${{ env.target }} contains build files
         run: ls -la ${{ env.target }}
@@ -60,5 +58,5 @@ jobs:
           overwrite: true
           file_glob: true
           release_name: android_libreoffice_core_${{ github.ref_name }}
-          body: "These are compiled $REPO ${{ github.ref_name }} for Android for 4 platforms: armeabi-v7a, arm64-v8a, x86, x86_64"
+          body: "These are compiled ${{ env.lo_repo }} ${{ github.ref_name }} for Android for 4 platforms: armeabi-v7a, arm64-v8a, x86, x86_64"
       - run: echo "🍏 This job's status is ${{ job.status }}."
