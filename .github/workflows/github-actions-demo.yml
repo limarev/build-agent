@@ -15,15 +15,11 @@ jobs:
     strategy:
       matrix:
         arch: [armeabi-v7a, arm64-v8a, x86, x86_64]
-        working-directory: [/home/user/build]
-    # defaults:
-    #   run:
-    #     working-directory: ${{ matrix.working-directory }}
     container:
       image: klimarev/lo_co_build_env:1.5
       options: --user user
       env:
-        LIBREOFFICE_SOURCES_DIR: ${{ matrix.working-directory }}
+        LIBREOFFICE_SOURCES_DIR: .
     env:
       target: android_${{ matrix.arch }}_core_${{ github.ref_name }}
     permissions:
@@ -43,14 +39,15 @@ jobs:
           echo "🔎 This job builds $REPO repository ${{ github.ref_name }} tag for adnroid."
           echo "This job is run from $(whoami)"
           echo "Current directory is $(pwd)"
+          echo "Current directory structure: $(ls -la)"
 
       - name: Build ${{ env.target }}
         run: |
-          ls -la
-          mkdir -p ${{ env.target }}
-          cd ${{ env.target }}
-          /${{ matrix.working-directory }}/entrypoint.sh ${{ matrix.arch }}
-          ls -la ${{ env.target }}
+          mkdir -p ${{ env.target }} && cd ${{ env.target }}
+          ./../entrypoint.sh ${{ matrix.arch }}
+
+      - name: Check if ${{ env.target }} contains build files
+        run: ls -la ${{ env.target }}
 
       - name: Archive android_* artifacts
         run: |
