@@ -54,9 +54,9 @@ jobs:
           du -sh ${{ env.target }}
           ls -la ${{ env.target }}
 
-      - name: Archive android_* artifacts
+      - name: Archive ${{ env.target }}/instdir
         run: |
-          tar --totals -czf  ${{ env.target }}.tar.gz ${{ env.target }}
+          tar --totals -czf  ${{ env.target }}.tar.gz ${{ env.target }}/instdir
 
       - name: Upload files to a GitHub release
         uses: svenstaro/upload-release-action@2.7.0
