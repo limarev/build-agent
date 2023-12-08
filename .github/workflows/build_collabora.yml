@@ -39,7 +39,7 @@ jobs:
 
       - name: Download LibreOffice core
         run: |
-          wget https://github.com/limarev/build-agent/releases/download/co-23.05.6-2/android_arm64-v8a_core_co-23.05.6-2.tar.gz -O - | tar -xz
+          curl -s -L https://github.com/limarev/build-agent/releases/download/co-23.05.6-2/android_arm64-v8a_core_co-23.05.6-2.tar.gz | tar xvzf -
           ls -la
       # - name: Build ${{ env.target }}
       #   run: |
