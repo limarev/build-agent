@@ -2,9 +2,9 @@ name: Publishing
 run-name: Publish new collabora release ${{ github.ref_name }}
 
 on:
-  [push]
-    # tags:
-      # - 'co-*'
+  push:
+    tags:
+      - 'cp-*'
 
 jobs:
   build:
@@ -49,7 +49,7 @@ jobs:
           cd online
           ./autogen.sh
           ./configure --enable-androidapp \
-                      --with-lo-builddir=$workspace/android_arm64-v8a_core_co-23.05.6-2/instdir:$workspace/android_armeabi-v7a_core_co-23.05.6-2/instdir:$workspace/android_x86_64_core_co-23.05.6-2/instdir:$workspace/android_x86_core_co-23.05.6-2/instdir \
+                      --with-lo-builddir=$workspace/android_arm64-v8a_core_co-23.05.6-2:$workspace/android_armeabi-v7a_core_co-23.05.6-2:$workspace/android_x86_64_core_co-23.05.6-2:$workspace/android_x86_core_co-23.05.6-2 \
                       --with-poco-includes=$poco/include:$poco/include:$poco/include:$poco/include \
                       --with-poco-libs=$poco/armeabi-v7a/lib:$poco/arm64-v8a/lib:$poco/x86/lib:$poco/x86_64/lib \
                       --with-zstd-includes=$zstd/armeabi-v7a/include:$zstd/arm64-v8a/include:$zstd/x86/include:$zstd/x86_64/include \

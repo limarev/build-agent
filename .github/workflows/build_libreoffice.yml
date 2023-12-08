@@ -54,7 +54,8 @@ jobs:
           du -sh ${{ env.target }}
           ls -la ${{ env.target }}
 
-      - name: Archive ${{ env.target }}/instdir
+      - name: Archive ${{ env.target }}
+        continue-on-error: true
         run: |
           tar --totals -czf  ${{ env.target }}.tar.gz ${{ env.target }}/instdir
 
