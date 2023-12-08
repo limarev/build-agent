@@ -16,43 +16,46 @@ jobs:
       image: klimarev/lo_co_build_env:1.5
       options: --user user -v ${{ github.workspace }}:/home/user/build
       env:
-        LIBREOFFICE_SOURCES_DIR: /home/user/build/core
+        LIBREOFFICE_SOURCES_DIR: /home/user/build
+    strategy:
+      matrix:
+        platform: [armeabi-v7a, arm64-v8a, x86, x86_64]
     permissions:
       contents: write
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-        with:
-          repository: LibreOffice/core
-          ref: co-23.05.6-2
-          submodules: 'recursive'
-          path: './core'
-      - name: Build android_armeabi-v7a_core_${{ github.ref_name }}
+        # with:
+        #   repository: LibreOffice/core
+        #   ref: co-23.05.6-2
+        #   submodules: 'recursive'
+        #   path: './core'
+      - name: Build info
         run: |
           echo "🎉 The job was automatically triggered by a ${{ github.event_name }} event."
           echo "🐧 This job is now running on a ${{ runner.os }} server!"
           echo "🔎 This job builds $REPO repository ${{ github.ref_name }} tag for adnroid."
           echo "This job is run from $(whoami)"
           echo "Current directory is $(pwd)"
+
+      - name: Build android_${{ matrix.platform }}_core_${{ github.ref_name }}
+        run: |
           ls -la /home/user/build
-          mkdir -p android_armeabi-v7a_core_${{ github.ref_name }}
-          cd android_armeabi-v7a_core_${{ github.ref_name }}
-          /home/user/build/entrypoint.sh CPAndroid
-          ls -la /home/user/build/android_armeabi-v7a_core_${{ github.ref_name }}
+          mkdir -p android_${{ matrix.platform }}_core_${{ github.ref_name }}
+          cd android_${{ matrix.platform }}_core_${{ github.ref_name }}
+          /home/user/build/entrypoint.sh ${{ matrix.platform }}
+          ls -la /home/user/build/android_${{ matrix.platform }}_core_${{ github.ref_name }}
 
+      - name: Archive android_* artifacts
+        run: |
+          tar czvf android_${{ matrix.platform }}_core_${{ github.ref_name }}.tar.gz android_${{ matrix.platform }}_core_${{ github.ref_name }}
 
-      # - name: Archive android_* artifacts
-      #   run: |
-      #     tar czvf android_armeabi-v7a_core_${{ github.ref_name }}.tar.gz core
-      #     tar czvf android_arm64-v8a_core_${{ github.ref_name }}.tar.gz LICENSE
-      #     tar czvf android_x86_core_${{ github.ref_name }}.tar.gz LICENSE
-      #     tar czvf android_x86_64_core_${{ github.ref_name }}.tar.gz LICENSE
-      # - name: Upload files to a GitHub release
-      #   uses: svenstaro/upload-release-action@2.7.0
-      #   with:
-      #     file: "*.tar.gz"
-      #     overwrite: true
-      #     file_glob: true
-      #     release_name: android_core_${{ github.ref_name }}
-      #     body: "These are compiled LibreOffice core ${{ github.ref_name }} for Android for 4 platforms: armeabi-v7a, arm64-v8a, x86, x86_64"
+      - name: Upload files to a GitHub release
+        uses: svenstaro/upload-release-action@2.7.0
+        with:
+          file: "*.tar.gz"
+          overwrite: true
+          file_glob: true
+          release_name: android_core_${{ github.ref_name }}
+          body: "These are compiled LibreOffice core ${{ github.ref_name }} for Android for 4 platforms: armeabi-v7a, arm64-v8a, x86, x86_64"
       - run: echo "🍏 This job's status is ${{ job.status }}."

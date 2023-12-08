@@ -42,8 +42,8 @@ function build {
     --with-android-sdk=${ANDROID_SDK_PATH}
     --with-distro=$1
     --disable-ccache" > ${LIBREOFFICE_SOURCES_DIR}/autogen.input
-    make distclean
-    ${LIBREOFFICE_SOURCES_DIR}/autogen.sh && make
+    # make distclean
+    # ${LIBREOFFICE_SOURCES_DIR}/autogen.sh && make
 }
 
 case $1 in
@@ -51,23 +51,23 @@ case $1 in
         make distclean
         ./autogen.sh --with-all-tarballs && make fetch
         ;;
-    "CPAndroid")
+    "armeabi-v7a")
         build "CPAndroid"
         ;;
-    "CPAndroidAarch64")
+    "arm64-v8a")
         build "CPAndroidAarch64"
         ;;
-    "CPAndroidX86")
+    "x86")
         build "CPAndroidX86"
         ;;
-    "CPAndroidX86_64")
+    "x86_64")
         build "CPAndroidX86_64"
         ;;
     "Collabora")
         build_collabora
         ;;
     *)
-        echo "Available options: fetch CPAndroid CPAndroidAarch64 CPAndroidX86 CPAndroidX86_64 Collabora\n Run /bin/bash ..."
+        echo "Available options: fetch armeabi-v7a arm64-v8a x86 x86_64 Collabora\n Run /bin/bash ..."
         # build_collabora
         /bin/bash
 esac
