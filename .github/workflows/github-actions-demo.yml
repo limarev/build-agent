@@ -14,7 +14,7 @@ jobs:
     runs-on: self-hosted
     container:
       image: klimarev/lo_co_build_env:1.5
-      options: --user user -v ${{ github.workspace }}:/home/user/build --workdir /home/user/build
+      options: --user user -v ${{ github.workspace }}:/home/user/build
       env:
         LIBREOFFICE_SOURCES_DIR: /home/user/build/core
     permissions:
@@ -27,17 +27,18 @@ jobs:
           ref: co-23.05.6-2
           submodules: 'recursive'
           path: './core'
-      - name: Build info
+      - name: Build android_armeabi-v7a_core_${{ github.ref_name }}
         run: |
           echo "🎉 The job was automatically triggered by a ${{ github.event_name }} event."
           echo "🐧 This job is now running on a ${{ runner.os }} server!"
           echo "🔎 This job builds $REPO repository ${{ github.ref_name }} tag for adnroid."
-          whoami
-          pwd
+          echo "This job is run from $(whoami)"
+          echo "Current directory is $(pwd)"
           ls -la /home/user/build
           mkdir -p android_armeabi-v7a_core_${{ github.ref_name }}
           cd android_armeabi-v7a_core_${{ github.ref_name }}
           /home/user/build/entrypoint.sh CPAndroid
+          ls -la /home/user/build/android_armeabi-v7a_core_${{ github.ref_name }}
 
 
       # - name: Archive android_* artifacts
