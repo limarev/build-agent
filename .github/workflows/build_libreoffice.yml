@@ -57,7 +57,7 @@ jobs:
       - name: Archive ${{ env.target }}
         continue-on-error: true
         run: |
-          tar --totals -czf  ${{ env.target }}.tar.gz ${{ env.target }}/instdir
+          tar --totals -czf  ${{ env.target }}.tar.gz ${{ env.target }}
 
       - name: Upload files to a GitHub release
         uses: svenstaro/upload-release-action@2.7.0
