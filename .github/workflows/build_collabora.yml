@@ -1,4 +1,4 @@
-name: Publishing
+name: Collabora
 run-name: Publish new collabora release ${{ github.ref_name }}
 
 on:

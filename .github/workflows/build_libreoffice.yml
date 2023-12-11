@@ -1,4 +1,4 @@
-name: Publishing
+name: LibreOffice
 run-name: Publish new libreoffice release ${{ github.ref_name }}
 
 on:
