@@ -17,9 +17,10 @@ jobs:
 
       - name: Build
         run: |
+          mkdir -p test && cd test
           ./entrypoint.sh test
         env:
-          LIBREOFFICE_SOURCES_DIR: ./../core
+          LIBREOFFICE_SOURCES_DIR: ./..
           workspace: ..
           poco: /opt/android-poco
           zstd: /opt/android-zstd
