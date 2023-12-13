@@ -30,7 +30,7 @@ jobs:
           repository: ${{ env.lo_repo }}
           ref: ${{ github.ref_name }}
           submodules: 'recursive'
-          path: './core'
+          path: './${{ env.target }}'
           
       - name: Build info 
         run: |
@@ -44,8 +44,7 @@ jobs:
 
       - name: Build ${{ env.target }}
         run: |
-          cd core && ./autogen.sh --help && cd ..
-          mkdir -p ${{ env.target }} && cd ${{ env.target }}
+          cd ${{ env.target }}
           ./../entrypoint.sh ${{ matrix.arch }}
         env:
           LIBREOFFICE_SOURCES_DIR: ./../core
