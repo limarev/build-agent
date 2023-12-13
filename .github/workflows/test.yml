@@ -1,0 +1,26 @@
+name: Test
+run-name: Test
+
+on:
+  [push]
+
+
+jobs:
+  build:
+    runs-on: self-hosted
+    container:
+      image: klimarev/lo_co_build_env:1.5
+      options: --user root
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Build
+        run: |
+          ./entrypoint.sh test
+        env:
+          LIBREOFFICE_SOURCES_DIR: ./../core
+          workspace: ..
+          poco: /opt/android-poco
+          zstd: /opt/android-zstd
+          ANDROID_SDK_ROOT: /opt/android_sdk

@@ -46,6 +46,16 @@ function build {
     ${LIBREOFFICE_SOURCES_DIR}/autogen.sh && make
 }
 
+function echo_test {
+    echo \
+    "--with-android-package-name=com.collabora.for.gerrit
+    --with-android-ndk=${ANDROID_NDK_PATH}
+    --with-android-sdk=${ANDROID_SDK_PATH}
+    --with-distro=$1
+    --disable-ccache" > autogen.input
+    cat autogen.input
+}
+
 case $1 in
     "fetch")
         make distclean
@@ -65,6 +75,9 @@ case $1 in
         ;;
     "Collabora")
         build_collabora
+        ;;
+    "test")
+        echo_test Test
         ;;
     *)
         echo "Available options: fetch armeabi-v7a arm64-v8a x86 x86_64 Collabora\n Run /bin/bash ..."
