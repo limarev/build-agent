@@ -2,16 +2,16 @@ name: Collabora
 run-name: Publish new collabora release ${{ github.ref_name }}
 
 on:
-  push:
-    tags:
-      - 'cp-*'
+  [push]
+    # tags:
+      # - 'cp-*'
 
 jobs:
   build:
     runs-on: self-hosted
     container:
       image: klimarev/lo_co_build_env:1.5
-      options: --user user
+      options: --user root
     env:
       lo_repo: CollaboraOnline/online
     permissions:
@@ -65,6 +65,7 @@ jobs:
           workspace: ..
           poco: /opt/android-poco
           zstd: /opt/android-zstd
+          ANDROID_SDK_ROOT: $ANDROID_SDK_PATH
 
       # - name: Check if ${{ env.target }} contains build files
       #   run: |
