@@ -18,7 +18,7 @@ jobs:
       - name: Build
         run: |
           mkdir -p test && cd test
-          ./entrypoint.sh test
+          ./../entrypoint.sh test
         env:
           LIBREOFFICE_SOURCES_DIR: ./..
           workspace: ..

@@ -52,8 +52,8 @@ function echo_test {
     --with-android-ndk=${ANDROID_NDK_PATH}
     --with-android-sdk=${ANDROID_SDK_PATH}
     --with-distro=$1
-    --disable-ccache" > autogen.input
-    cat autogen.input
+    --disable-ccache" > ${LIBREOFFICE_SOURCES_DIR}/autogen.input
+    cat ${LIBREOFFICE_SOURCES_DIR}/autogen.input
 }
 
 case $1 in
