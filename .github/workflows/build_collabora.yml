@@ -57,15 +57,13 @@ jobs:
                       --disable-setcap \
                       --enable-silent-rules
           cd android
-          gradle wrapper
-          ./gradlew clean
-          ./gradlew -Dfile.encoding=UTF-8 --parallel build
+          ./gradlew --parallel build
         env:
           LIBREOFFICE_SOURCES_DIR: ./../core
           workspace: ..
           poco: /opt/android-poco
           zstd: /opt/android-zstd
-          ANDROID_SDK_ROOT: $ANDROID_SDK_PATH
+          ANDROID_SDK_ROOT: /opt/android_sdk
 
       # - name: Check if ${{ env.target }} contains build files
       #   run: |
