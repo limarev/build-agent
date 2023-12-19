@@ -35,7 +35,7 @@ gradle wrapper
 
 }
 
-function build {
+function generate_autogen {
     echo \
     "--with-android-package-name=com.collabora.for.gerrit
     --with-android-ndk=${ANDROID_NDK_PATH}
@@ -43,8 +43,12 @@ function build {
     --with-distro=$1
     --disable-ccache" > autogen.input
     cat autogen.input
-    make distclean
-    ./autogen.sh && make
+}
+
+function build {
+    generate_autogen $1
+    # make distclean
+    ./autogen.sh && make fetch
 }
 
 function echo_test {

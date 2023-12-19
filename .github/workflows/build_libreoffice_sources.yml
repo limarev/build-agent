@@ -1,10 +1,10 @@
 name: LibreOffice
-run-name: Publish new libreoffice release ${{ github.ref_name }}
+run-name: Publish new libreoffice sources release ${{ github.ref_name }}
 
 on:
   push:
     tags:
-      - 'co-todo*'
+      - 'co-*'
 
 jobs:
   build:
@@ -46,8 +46,6 @@ jobs:
         run: |
           cd ${{ env.target }}
           ./../entrypoint.sh ${{ matrix.arch }}
-        env:
-          LIBREOFFICE_SOURCES_DIR: ./../core
 
       - name: Check if ${{ env.target }} contains build files
         run: |
@@ -59,12 +57,12 @@ jobs:
         run: |
           tar --totals -czf  ${{ env.target }}.tar.gz ${{ env.target }}
 
-      - name: Upload files to a GitHub release
+      - name: Upload LibreOffice sources to a GitHub release
         uses: svenstaro/upload-release-action@2.7.0
         with:
           file: "*.tar.gz"
           overwrite: true
           file_glob: true
-          release_name: android_libreoffice_core_${{ github.ref_name }}
-          body: "These are compiled ${{ env.lo_repo }} ${{ github.ref_name }} for Android for 4 platforms: armeabi-v7a, arm64-v8a, x86, x86_64"
+          release_name: android_libreoffice_core_src_${{ github.ref_name }}
+          body: "These are sources ${{ env.lo_repo }} ${{ github.ref_name }} for Android for 4 platforms: armeabi-v7a, arm64-v8a, x86, x86_64"
       - run: echo "🍏 This job's status is ${{ job.status }}."
