@@ -14,7 +14,7 @@ jobs:
         arch: [armeabi-v7a, arm64-v8a, x86, x86_64]
     container:
       image: klimarev/lo_co_build_env:1.8
-      options: --user 1003:1004
+      options: --user $(id -u ghactions):$(id -g ghactions)
     env:
       target: android_${{ matrix.arch }}_core_${{ github.ref_name }}
       lo_repo: LibreOffice/core
