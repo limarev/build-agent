@@ -2,9 +2,9 @@ name: LibreOffice
 run-name: Publish new libreoffice release ${{ github.ref_name }}
 
 on:
-  push:
-    tags:
-      - 'co-*'
+  [push]
+    # tags:
+      # - 'co-*'
 
 jobs:
   build:
@@ -14,7 +14,7 @@ jobs:
         arch: [armeabi-v7a, arm64-v8a, x86, x86_64]
     container:
       image: klimarev/lo_co_build_env:1.7
-      options: --user ghactions
+      options: --user ghactions -v ${{ github.workspace }}:/home/ghactions/build
     env:
       target: android_${{ matrix.arch }}_core_${{ github.ref_name }}
       lo_repo: LibreOffice/core
