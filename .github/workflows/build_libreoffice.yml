@@ -13,7 +13,7 @@ jobs:
       matrix:
         arch: [armeabi-v7a, arm64-v8a, x86, x86_64]
     container:
-      image: klimarev/lo_co_build_env:1.6
+      image: klimarev/lo_co_build_env:1.5
       options: --user user
     env:
       target: android_${{ matrix.arch }}_core_${{ github.ref_name }}
