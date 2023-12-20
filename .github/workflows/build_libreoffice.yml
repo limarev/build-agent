@@ -13,8 +13,8 @@ jobs:
       matrix:
         arch: [armeabi-v7a, arm64-v8a, x86, x86_64]
     container:
-      image: klimarev/lo_co_build_env:1.7
-      options: --user ghactions -v ${{ github.workspace }}:/home/ghactions/build
+      image: klimarev/lo_co_build_env:1.8
+      options: --user ghactions
     env:
       target: android_${{ matrix.arch }}_core_${{ github.ref_name }}
       lo_repo: LibreOffice/core
