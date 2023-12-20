@@ -2,9 +2,9 @@ name: LibreOffice
 run-name: Publish new libreoffice release ${{ github.ref_name }}
 
 on:
-  [push]
-    # tags:
-      # - 'co-*'
+  push:
+    tags:
+      - 'co-*'
 
 jobs:
   build:
