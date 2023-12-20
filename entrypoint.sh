@@ -48,7 +48,7 @@ function generate_autogen {
 function build {
     generate_autogen $1
     # make distclean
-    ./autogen.sh && make fetch
+    ./autogen.sh && make
 }
 
 function echo_test {
@@ -63,8 +63,9 @@ function echo_test {
 
 case $1 in
     "fetch")
-        make distclean
-        ./autogen.sh --with-all-tarballs && make fetch
+        generate_autogen "CPAndroid"
+        # make distclean
+        ./autogen.sh && make fetch
         ;;
     "armeabi-v7a")
         build "CPAndroid"
@@ -85,7 +86,7 @@ case $1 in
         echo_test Test
         ;;
     *)
-        echo "Available options: fetch armeabi-v7a arm64-v8a x86 x86_64 Collabora\n Run /bin/bash ..."
+        echo "Available options: fetch armeabi-v7a arm64-v8a x86 x86_64 Collabora. Run /bin/bash ..."
         # build_collabora
         /bin/bash
 esac
