@@ -4,7 +4,7 @@ run-name: Publish new libreoffice release ${{ github.ref_name }}
 on:
   push:
     tags:
-      - 'co-todo*'
+      - 'co-*'
 
 jobs:
   build:
@@ -13,7 +13,7 @@ jobs:
       matrix:
         arch: [armeabi-v7a, arm64-v8a, x86, x86_64]
     container:
-      image: klimarev/lo_co_build_env:1.5
+      image: klimarev/lo_co_build_env:1.6
       options: --user user
     env:
       target: android_${{ matrix.arch }}_core_${{ github.ref_name }}
@@ -46,8 +46,6 @@ jobs:
         run: |
           cd ${{ env.target }}
           ./../entrypoint.sh ${{ matrix.arch }}
-        env:
-          LIBREOFFICE_SOURCES_DIR: ./../core
 
       - name: Check if ${{ env.target }} contains build files
         run: |
@@ -59,12 +57,18 @@ jobs:
         run: |
           tar --totals -czf  ${{ env.target }}.tar.gz ${{ env.target }}
 
-      - name: Upload files to a GitHub release
-        uses: svenstaro/upload-release-action@2.7.0
+      - name: 'Upload Artifact'
+        uses: actions/upload-artifact@v4
         with:
-          file: "*.tar.gz"
-          overwrite: true
-          file_glob: true
-          release_name: android_libreoffice_core_${{ github.ref_name }}
-          body: "These are compiled ${{ env.lo_repo }} ${{ github.ref_name }} for Android for 4 platforms: armeabi-v7a, arm64-v8a, x86, x86_64"
+          name: ${{ env.target }}.tar.gz
+          path: ${{ env.target }}.tar.gz
+
+      # - name: Upload files to a GitHub release
+      #   uses: svenstaro/upload-release-action@2.7.0
+      #   with:
+      #     file: "*.tar.gz"
+      #     overwrite: true
+      #     file_glob: true
+      #     release_name: android_libreoffice_core_${{ github.ref_name }}
+      #     body: "These are compiled ${{ env.lo_repo }} ${{ github.ref_name }} for Android for 4 platforms: armeabi-v7a, arm64-v8a, x86, x86_64"
       - run: echo "🍏 This job's status is ${{ job.status }}."
