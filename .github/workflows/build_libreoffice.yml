@@ -57,8 +57,9 @@ jobs:
       - name: 'Upload Artifact'
         uses: actions/upload-artifact@v4
         with:
-          name: ${{ env.target }}.tar.gz
+          name: ${{ env.target }}
           path: ${{ env.target }}.tar.gz
+          compression-level: 0 # no compression
   build:
     runs-on: self-hosted
     needs: checkout
@@ -81,15 +82,14 @@ jobs:
       - name: Download lo_core
         uses: actions/download-artifact@v4
         with:
-          name: lo_core_${{ github.ref_name }}.tar.gz
-          path: lo_core_${{ github.ref_name }}.tar.gz
+          name: ${{ env.cache }}
           
-      - name: Untar lo_core_${{ github.ref_name }}.tar.gz
+      - name: Untar ${{ env.cache }}.tar.gz
         run: |
           mkdir ${{ env.target }}
-          tar --totals -xzf lo_core_${{ github.ref_name }}.tar.gz -C ${{ env.target }} --strip-components 1
-          rm lo_core_${{ github.ref_name }}.tar.gz
-          
+          tar --totals -xzf ${{ env.cache }}.tar.gz -C ${{ env.target }} --strip-components 1
+          rm ${{ env.cache }}.tar.gz
+
       - name: Build info 
         run: |
           echo "🎉 The job was automatically triggered by a ${{ github.event_name }} event."
@@ -118,7 +118,7 @@ jobs:
       - name: 'Upload Artifact'
         uses: actions/upload-artifact@v4
         with:
-          name: ${{ env.target }}.tar.gz
+          name: ${{ env.target }}
           path: ${{ env.target }}.tar.gz
 
       # - name: Upload files to a GitHub release
