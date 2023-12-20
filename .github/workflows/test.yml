@@ -2,24 +2,58 @@ name: Test
 run-name: Test
 
 on:
-  [pull_request]
+  [push]
 
 
 jobs:
   build:
     runs-on: self-hosted
     container:
-      image: klimarev/lo_co_build_env:1.5
-      options: --user root
+      image: klimarev/lo_co_build_env:1.9
+      options: --user ghactions
+    env:
+      target: lo_test
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Make a 4GB random binary file
+      - name: Make a 1GB random binary file
         run: |
-          dd if=/dev/urandom of=my-4gb-file bs=1M count=4000
-      - uses: actions/upload-artifact@v4
+          mkdir ${{ env.target }}
+          cd ${{ env.target }}
+          dd if=/dev/urandom of=my-1gb-file bs=1M count=1000
+
+      - name: Archive ${{ env.target }}
+        continue-on-error: true
+        run: |
+          tar --totals -czf  ${{ env.target }}.tar.gz ${{ env.target }}
+      - name: Upload
+        uses: actions/upload-artifact@v4
         with:
-          name: my-artifact
-          path: my-4gb-file
+          name: ${{ env.target }}
+          path: ${{ env.target }}.tar.gz
           compression-level: 0 # no compression
+
+      - name: Clean
+        run: |
+          ls -la
+          rm -rf ${{ env.target }} ${{ env.target }}.tar.gz
+
+      - name: Download ${{ env.target }}
+        uses: actions/download-artifact@v4
+        with:
+          name: ${{ env.target }}
+
+      - name: Info
+        run: |
+          ls -R
+
+      - name: Untar ${{ env.target }}.tar.gz
+        run: |
+          mkdir ${{ env.target }}
+          tar --totals -xzf ${{ env.target }}.tar.gz -C ${{ env.target }} --strip-components 1
+          rm ${{ env.target }}.tar.gz
+
+      - name: Check results
+        run: |
+          ls -R
