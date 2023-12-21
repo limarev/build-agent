@@ -10,7 +10,7 @@ jobs:
   build:
     runs-on: self-hosted
     container:
-      image: klimarev/lo_co_build_env:1.9
+      image: klimarev/lo_co_build_env:1.10
       options: --user ghactions
     env:
       lo_repo: CollaboraOnline/online
@@ -53,6 +53,7 @@ jobs:
 
       - name: Build ${{ env.lo_repo }}
         run: |
+          export workspace=$(pwd)
           cd online
           ./autogen.sh
           ./configure --enable-androidapp \
@@ -63,15 +64,14 @@ jobs:
                       --with-zstd-libs=$zstd/armeabi-v7a/lib:$zstd/arm64-v8a/lib:$zstd/x86/lib:$zstd/x86_64/lib \
                       --disable-setcap \
                       --enable-silent-rules
-          # make
+          make
           cd android
           ./gradlew --parallel build
         env:
-          workspace: ..
           poco: /opt/android-poco
           zstd: /opt/android-zstd
           ANDROID_SDK_ROOT: /opt/android_sdk
-          ANDROID_NDK_HOME: /opt/android_sdk/ndk/20.1.5948944
+          # ANDROID_NDK_HOME: /opt/android_sdk/ndk/20.1.5948944
 
       # - name: Check if ${{ env.target }} contains build files
       #   run: |
