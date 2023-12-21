@@ -2,8 +2,6 @@
 
 set -x
 
-workspace=/home/user
-
 function build_collabora {
 
 poco=/opt/android-poco
@@ -28,10 +26,9 @@ export ANDROID_SDK_ROOT=${ANDROID_SDK_PATH}
             --disable-setcap \
             --enable-silent-rules
             # --enable-debug
+make
 cd android
-gradle wrapper
-./gradlew clean
-./gradlew -Dfile.encoding=UTF-8 --parallel build
+./gradlew --parallel build
 
 }
 
@@ -42,29 +39,18 @@ function generate_autogen {
     --with-android-sdk=${ANDROID_SDK_PATH}
     --with-distro=$1
     --disable-ccache" > autogen.input
-    cat autogen.input
 }
 
 function build {
     generate_autogen $1
-    # make distclean
+    make distclean
     ./autogen.sh && make
-}
-
-function echo_test {
-    echo \
-    "--with-android-package-name=com.collabora.for.gerrit
-    --with-android-ndk=${ANDROID_NDK_PATH}
-    --with-android-sdk=${ANDROID_SDK_PATH}
-    --with-distro=$1
-    --disable-ccache" > ${LIBREOFFICE_SOURCES_DIR}/autogen.input
-    cat ${LIBREOFFICE_SOURCES_DIR}/autogen.input
 }
 
 case $1 in
     "fetch")
-        generate_autogen "CPAndroid"
-        # make distclean
+        generate_autogen CPAndroid
+        make distclean
         ./autogen.sh && make fetch
         ;;
     "armeabi-v7a")
@@ -82,11 +68,7 @@ case $1 in
     "Collabora")
         build_collabora
         ;;
-    "test")
-        echo_test Test
-        ;;
     *)
         echo "Available options: fetch armeabi-v7a arm64-v8a x86 x86_64 Collabora. Run /bin/bash ..."
-        # build_collabora
         /bin/bash
 esac
