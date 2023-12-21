@@ -2,9 +2,9 @@ name: Collabora
 run-name: Publish new collabora release ${{ github.ref_name }}
 
 on:
-  push:
-    tags:
-      - 'cp-*'
+  [push]
+    # tags:
+      # - 'cp-*'
 
 jobs:
   build:
@@ -28,25 +28,13 @@ jobs:
           ref: cp-23.05.6-2
           path: './online'
 
-      - name: Download android_armeabi-v7a_core_co-23.05.6-2
+      - name: Download LibreOffice core compiled for android
         uses: actions/download-artifact@v4
         with:
-          run-id: 1127786845
-
-      - name: Download android_arm64-v8a_core_co-23.05.6-2
-        uses: actions/download-artifact@v4
-        with:
-          run-id: 1127911341
-
-      - name: Download android_x86_core_co-23.05.6-2
-        uses: actions/download-artifact@v4
-        with:
-          run-id: 1127847396
-
-      - name: Download android_x86_64_core_co-23.05.6-2
-        uses: actions/download-artifact@v4
-        with:
-          run-id: 1127962925
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          pattern: android*
+          merge-multiple: true
+          run-id: 7281509146
 
       - name: Build info 
         run: |
@@ -60,10 +48,7 @@ jobs:
 
       - name: Extract archives
         run: |
-          tar --totals -xzf android_armeabi-v7a_core_co-23.05.6-2.tar.gz
-          tar --totals -xzf android_arm64-v8a_core_co-23.05.6-2.tar.gz
-          tar --totals -xzf android_x86_core_co-23.05.6-2.tar.gz
-          tar --totals -xzf android_x86_64_core_co-23.05.6-2.tar.gz
+          for file in *.tar.gz; do tar -xzf "$file"; done
           rm *.tar.gz
 
       - name: Build ${{ env.lo_repo }}
