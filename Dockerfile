@@ -178,13 +178,17 @@ RUN apt-get update \
 
 # ENV JAVA_HOME=/usr/lib/jvm/java-14-openjdk-amd64
 
-RUN useradd -ms /bin/bash user
-WORKDIR /home/user
-COPY entrypoint.sh /home/user
+RUN addgroup --gid 1004 ghactions \
+ && useradd --system --create-home --home-dir /home/ghactions --shell /bin/bash --gid 1004 --uid 1003 ghactions --password $(openssl passwd -1 ghactions)
 
-USER user
+WORKDIR /home/ghactions
+COPY entrypoint.sh /home/ghactions
+RUN chmod +x entrypoint.sh
+RUN chown -R ghactions:ghactions $ANDROID_SDK_PATH
 
-ENTRYPOINT [ "/home/user/entrypoint.sh" ]
+USER ghactions
+
+ENTRYPOINT [ "/home/ghactions/entrypoint.sh" ]
 
 # FROM ubuntu:22.04
 

@@ -2,9 +2,9 @@ name: Collabora
 run-name: Publish new collabora release ${{ github.ref_name }}
 
 on:
-  [push]
-    # tags:
-      # - 'cp-*'
+  push:
+    tags:
+      - 'cp-*'
 
 jobs:
   build:
