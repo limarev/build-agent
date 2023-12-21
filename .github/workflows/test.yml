@@ -2,17 +2,22 @@ name: Test
 run-name: Test
 
 on:
-  [pull_request]
+  [push]
 
 
 jobs:
-  build:
+  upload:
     runs-on: self-hosted
+    outputs:
+      output1: ${{ steps.testupload.outputs.artifact-id }}
+    strategy:
+      matrix:
+        variant: [1, 2]
     container:
       image: klimarev/lo_co_build_env:1.9
       options: --user ghactions
     env:
-      target: lo_test
+      target: lo_test_${{ matrix.variant }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -21,14 +26,16 @@ jobs:
         run: |
           mkdir ${{ env.target }}
           cd ${{ env.target }}
-          dd if=/dev/urandom of=my-1gb-file bs=1M count=1000
+          dd if=/dev/urandom of=my-1gb-file bs=1M count=200
 
       - name: Archive ${{ env.target }}
         continue-on-error: true
         run: |
           tar --totals -czf  ${{ env.target }}.tar.gz ${{ env.target }}
+
       - name: Upload
         uses: actions/upload-artifact@v4
+        id: testupload
         with:
           name: ${{ env.target }}
           path: ${{ env.target }}.tar.gz
@@ -39,21 +46,35 @@ jobs:
           ls -la
           rm -rf ${{ env.target }} ${{ env.target }}.tar.gz
 
-      - name: Download ${{ env.target }}
-        uses: actions/download-artifact@v4
-        with:
-          name: ${{ env.target }}
+  download:
+    runs-on: self-hosted
+    needs: upload
+    container:
+      image: klimarev/lo_co_build_env:1.9
+      options: --user ghactions
+    env:
+      target: lo_test
+    steps:
+      - name: Show run ID
+        env:
+          OUTPUT1: ${{needs.upload.outputs.output1}}
+        run: echo "Artifact ID from previous job is $OUTPUT1"
 
-      - name: Info
-        run: |
-          ls -R
+      # - name: Download ${{ env.target }}
+      #   uses: actions/download-artifact@v4
+      #   with:
+      #     name: ${{ env.target }}
 
-      - name: Untar ${{ env.target }}.tar.gz
-        run: |
-          mkdir ${{ env.target }}
-          tar --totals -xzf ${{ env.target }}.tar.gz -C ${{ env.target }} --strip-components 1
-          rm ${{ env.target }}.tar.gz
+      # - name: Info
+      #   run: |
+      #     ls -R
 
-      - name: Check results
-        run: |
-          ls -R
+      # - name: Untar ${{ env.target }}.tar.gz
+      #   run: |
+      #     mkdir ${{ env.target }}
+      #     tar --totals -xzf ${{ env.target }}.tar.gz -C ${{ env.target }} --strip-components 1
+      #     rm ${{ env.target }}.tar.gz
+
+      # - name: Check results
+      #   run: |
+      #     ls -R

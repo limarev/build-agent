@@ -10,7 +10,7 @@ jobs:
   build:
     runs-on: self-hosted
     container:
-      image: klimarev/lo_co_build_env:1.5
+      image: klimarev/lo_co_build_env:1.9
       options: --user root
     env:
       lo_repo: CollaboraOnline/online
@@ -37,6 +37,13 @@ jobs:
           echo "Current directory structure: $(ls -la)"
           echo "CollaboraOnline directory size: $(du -sh online)"
 
+      - name: Download LibreOffice core
+        uses: actions/download-artifact@v4
+        with:
+          path: my-artifact
+          pattern: my-artifact-*
+          merge-multiple: true
+      - run: ls -R my-artifact
       - name: Download LibreOffice core
         run: |
           curl -s -L https://github.com/limarev/build-agent/releases/download/co-23.05.6-2/android_arm64-v8a_core_co-23.05.6-2.tar.gz | tar xvzf -
