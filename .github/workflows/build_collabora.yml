@@ -63,14 +63,15 @@ jobs:
                       --with-zstd-libs=$zstd/armeabi-v7a/lib:$zstd/arm64-v8a/lib:$zstd/x86/lib:$zstd/x86_64/lib \
                       --disable-setcap \
                       --enable-silent-rules
-          make
-          # cd android
-          # ./gradlew --parallel build
+          # make
+          cd android
+          ./gradlew --parallel build
         env:
           workspace: ..
           poco: /opt/android-poco
           zstd: /opt/android-zstd
           ANDROID_SDK_ROOT: /opt/android_sdk
+          ANDROID_NDK_HOME: /opt/android_sdk/ndk/20.1.5948944
 
       # - name: Check if ${{ env.target }} contains build files
       #   run: |
