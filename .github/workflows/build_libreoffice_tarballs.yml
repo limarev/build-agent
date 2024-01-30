@@ -1,5 +1,5 @@
 name: LibreOffice tarballs
-run-name: Publish libreoffice tarballs ${{ github.ref_name }}
+run-name: Publish libreoffice tarballs
 
 on: workflow_dispatch
 
@@ -10,7 +10,7 @@ jobs:
       image: klimarev/lo_co_build_env:1.9
       options: --user ghactions
     env:
-      target: lo_core_${{ github.ref_name }}
+      target: lo_core
       lo_repo: LibreOffice/core
     permissions:
       contents: write
@@ -22,7 +22,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           repository: ${{ env.lo_repo }}
-          ref: ${{ github.ref_name }}
+          ref: master
           submodules: 'recursive'
           path: './${{ env.target }}'
 
