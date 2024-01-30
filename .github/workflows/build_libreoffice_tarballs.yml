@@ -1,4 +1,4 @@
-name: LibreOffice
+name: LibreOffice tarballs
 run-name: Publish libreoffice tarballs ${{ github.ref_name }}
 
 on: workflow_dispatch
