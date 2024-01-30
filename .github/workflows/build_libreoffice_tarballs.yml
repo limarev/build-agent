@@ -1,0 +1,71 @@
+name: LibreOffice
+run-name: Publish libreoffice tarballs ${{ github.ref_name }}
+
+on: workflow_dispatch
+
+jobs:
+  checkout:
+    runs-on: self-hosted
+    container:
+      image: klimarev/lo_co_build_env:1.9
+      options: --user ghactions
+    env:
+      target: lo_core_${{ github.ref_name }}
+      lo_repo: LibreOffice/core
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Checkout ${{ env.lo_repo }}
+        uses: actions/checkout@v4
+        with:
+          repository: ${{ env.lo_repo }}
+          ref: ${{ github.ref_name }}
+          submodules: 'recursive'
+          path: './${{ env.target }}'
+
+      - name: Build info 
+        run: |
+          echo "🎉 The job was automatically triggered by a ${{ github.event_name }} event."
+          echo "🐧 This job is now running on a ${{ runner.os }} server!"
+          echo "🔎 This job builds ${{ env.lo_repo }} repository ${{ github.ref_name }} tag for adnroid."
+          echo "This job is run from $(whoami)"
+          echo "Current directory is $(pwd)"
+          echo "Current directory structure: $(ls -la)"
+          echo "LibreOffice core directory size: $(du -sh ${{ env.target }})"
+
+      - name: Fetch tarballs ${{ env.target }}
+        run: |
+          cd ${{ env.target }}
+          ./../entrypoint.sh fetch
+
+      - name: Check if ${{ env.target }} contains build files
+        run: |
+          du -sh ${{ env.target }}
+          du -sh ${{ env.target }}/external/tarballs
+          ls -la ${{ env.target }}/external/tarballs
+
+      - name: Archive ${{ env.target }}/external/tarballs
+        continue-on-error: true
+        run: |
+          tar --totals -czf  libreoffice_tarballs.tar.gz ${{ env.target }}/external/tarballs
+
+      - name: 'Upload Artifact'
+        uses: actions/upload-artifact@v4
+        with:
+          name: libreoffice_tarballs
+          path: libreoffice_tarballs.tar.gz
+          compression-level: 0 # no compression
+
+      - name: Upload files to a GitHub release
+        uses: svenstaro/upload-release-action@2.7.0
+        with:
+          file: "*.tar.gz"
+          overwrite: true
+          file_glob: true
+          release_name: libreoffice_tarballs
+          body: "LibreOffice external libs tarballs"
+      
+      - run: echo "🍏 This job's status is ${{ job.status }}."
