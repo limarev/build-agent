@@ -22,7 +22,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           repository: ${{ env.lo_repo }}
-          ref: master
+          ref: co-23.05.6-2
           submodules: 'recursive'
           path: './${{ env.target }}'
 
