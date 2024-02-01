@@ -2,7 +2,7 @@ env:
   REF: distro/collabora/co-23.05
 
 name: LibreOffice
-run-name: Publish new libreoffice release ${{ env.REF }}
+run-name: Publish new libreoffice release
 
 on: workflow_dispatch
 
