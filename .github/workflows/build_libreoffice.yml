@@ -1,10 +1,15 @@
-env: 
-  REF: distro/collabora/co-23.05
-
 name: LibreOffice
+
 run-name: Publish new libreoffice release
 
-on: workflow_dispatch
+on: 
+  workflow_dispatch:
+    inputs:
+      lo_ref:
+        description: 'Commit hash of LibreOffice core repository'
+        default: 'c5262f7f0d259a903ee33595ff15386a7c4c8af6'
+        required: true
+        type: string
 
 jobs:
   checkout:
@@ -13,7 +18,7 @@ jobs:
       image: klimarev/lo_co_build_env:1.9
       options: --user ghactions
     env:
-      target: lo_core_${{ env.REF }}
+      target: lo_core_${{ inputs.lo_ref }}
       lo_repo: LibreOffice/core
     permissions:
       contents: write
@@ -25,7 +30,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           repository: ${{ env.lo_repo }}
-          ref: ${{ env.REF }}
+          ref: ${{ inputs.lo_ref }}
           submodules: 'recursive'
           path: './${{ env.target }}'
 
@@ -33,7 +38,7 @@ jobs:
         run: |
           echo "🎉 The job was automatically triggered by a ${{ github.event_name }} event."
           echo "🐧 This job is now running on a ${{ runner.os }} server!"
-          echo "🔎 This job builds ${{ env.lo_repo }} repository ${{ github.ref_name }} tag for adnroid."
+          echo "🔎 This job builds ${{ env.lo_repo }} repository ${{ inputs.lo_ref }} commit for android."
           echo "This job is run from $(whoami)"
           echo "Current directory is $(pwd)"
           echo "Current directory structure: $(ls -la)"
@@ -70,9 +75,9 @@ jobs:
       image: klimarev/lo_co_build_env:1.9
       options: --user ghactions
     env:
-      target: android_${{ matrix.arch }}_core_${{ env.REF }}
+      target: android_${{ matrix.arch }}_core_${{ inputs.lo_ref }}
       lo_repo: LibreOffice/core
-      cache: lo_core_${{ env.REF }}
+      cache: lo_core_${{ inputs.lo_ref }}
     permissions:
       contents: write
     steps:
@@ -94,7 +99,7 @@ jobs:
         run: |
           echo "🎉 The job was automatically triggered by a ${{ github.event_name }} event."
           echo "🐧 This job is now running on a ${{ runner.os }} server!"
-          echo "🔎 This job builds ${{ env.lo_repo }} repository ${{ env.REF }} tag for adnroid."
+          echo "🔎 This job builds ${{ env.lo_repo }} repository ${{ inputs.lo_ref }} commit for adnroid."
           echo "This job is run from $(whoami)"
           echo "Current directory is $(pwd)"
           echo "Current directory structure: $(ls -la)"
