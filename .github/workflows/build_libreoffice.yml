@@ -115,6 +115,10 @@ jobs:
           du -sh ${{ env.target }}
           ls -la ${{ env.target }}
 
+      - name: "Fix error workdir/UnpackedTarball/font_opendyslexic/OpenDyslexic-Italic.eot: Cannot open: Permission denied"
+        run: |
+          chmod -R ugo+r ${{ env.target }}/workdir/UnpackedTarball/font_opendyslexic
+
       - name: Archive ${{ env.target }}
         continue-on-error: true
         run: |
