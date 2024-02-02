@@ -109,7 +109,7 @@ jobs:
         uses: svenstaro/upload-release-action@2.7.0
         with:
           file: "*.tar.gz"
-          overwrite: true
+          overwrite: false
           file_glob: true
           release_name: android_collabora_${{ inputs.co_ref }}
           body: "These are compiled collabora app and lib for Android for 4 platforms: armeabi-v7a, arm64-v8a, x86, x86_64"
