@@ -10,6 +10,11 @@ on:
         default: 'c5262f7f0d259a903ee33595ff15386a7c4c8af6'
         required: true
         type: string
+      repo_tag:
+        description: 'Tag of build-agent repository'
+        default: '1.0.0'
+        required: true
+        type: string
 
 jobs:
   checkout:
@@ -25,6 +30,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.repo_tag }}
 
       - name: Checkout ${{ env.lo_repo }}
         uses: actions/checkout@v4
