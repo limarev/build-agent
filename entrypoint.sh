@@ -38,6 +38,7 @@ function generate_autogen {
     --with-android-ndk=${ANDROID_NDK_PATH}
     --with-android-sdk=${ANDROID_SDK_PATH}
     --with-distro=$1
+    --with-lang=ca ru
     --disable-ccache" > autogen.input
 }
 
