@@ -33,7 +33,12 @@ m4 \
 autotools-dev \
 automake \
 autoconf \
-libpixman-1-dev \
+libpixman-1-dev \ 
+libcairo2-dev \
+libpango1.0-dev \
+libjpeg-dev \
+libgif-dev \
+librsvg2-dev \
 && apt-get upgrade -y \
 && rm -rf /var/lib/apt/lists/* \
 && apt clean autoclean && apt autoremove -y
