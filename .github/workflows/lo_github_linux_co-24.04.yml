@@ -16,7 +16,7 @@ jobs:
   checkout:
     runs-on: self-hosted
     container:
-      image: klimarev/lo_co_build_env:1.10
+      image: klimarev/lo_base:1.1
       options: --user ghactions
     env:
       target: co_core_416ce481a3885e2dbe91fc3a38b85dc8271ec5bf

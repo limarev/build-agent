@@ -1,0 +1,38 @@
+# docker build --rm --progress=plain -t lo_reqs -f Dockerfile.linux
+
+FROM ubuntu:24.04 as libreoffice_requirements
+
+ARG DEBIAN_FRONTEND=noninteractive
+ENV TZ=Europe/Moscow
+
+# установка зависимостей
+RUN apt-get update \
+&& apt-get install -y \
+--no-install-recommends \
+--fix-missing \
+dialog \
+libpoco-dev \
+python3-polib \
+libcap-dev npm \
+libpam-dev \
+libzstd-dev \
+wget \
+git \
+build-essential \
+libtool \
+libcap2-bin \
+python3-lxml \
+libpng-dev \
+libcppunit-dev \
+pkg-config \
+fontconfig \
+snapd \
+chromium-browser \
+&& apt-get upgrade -y \
+&& rm -rf /var/lib/apt/lists/* \
+&& apt clean autoclean && apt autoremove -y
+
+RUN addgroup --gid 1003 ghactions \
+ && useradd --system --create-home --home-dir /home/ghactions --shell /bin/bash --gid 1003 --uid 1003 ghactions --password $(openssl passwd -1 ghactions)
+
+USER ghactions
