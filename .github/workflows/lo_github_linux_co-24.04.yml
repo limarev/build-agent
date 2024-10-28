@@ -1,0 +1,87 @@
+name: lo_github_linux_co-24.04
+
+run-name: Build Collabora Online release co-24.04 branch
+
+on:
+  push:
+  # workflow_dispatch:
+  #   inputs:
+  #     lo_ref:
+  #       description: 'Commit hash of Collabora core repository'
+  #       default: '416ce481a3885e2dbe91fc3a38b85dc8271ec5bf'
+  #       required: true
+  #       type: string
+
+jobs:
+  checkout:
+    runs-on: self-hosted
+    container:
+      image: klimarev/lo_co_build_env:1.10
+      options: --user ghactions
+    env:
+      target: co_core_416ce481a3885e2dbe91fc3a38b85dc8271ec5bf
+      co_repo: CollaboraOnline/online
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Checkout ${{ env.co_repo }}
+        uses: actions/checkout@v4
+        with:
+          repository: ${{ env.co_repo }}
+          ref: 416ce481a3885e2dbe91fc3a38b85dc8271ec5bf
+          submodules: 'recursive'
+          path: './${{ env.target }}'
+
+      - name: Build info 
+        run: |
+          echo "🎉 The job was automatically triggered by a ${{ github.event_name }} event."
+          echo "🐧 This job is now running on a ${{ runner.os }} server!"
+          echo "🔎 This job builds ${{ env.co_repo }} repository ${{ inputs.lo_ref }} commit for android."
+          echo "This job is run from $(whoami)"
+          echo "Current directory is $(pwd)"
+          echo "Current directory structure: $(ls -la)"
+          echo "LibreOffice core directory size: $(du -sh ${{ env.target }})"
+
+      - name: Fetch tarballs ${{ env.target }}
+        run: |
+          mkdir assets
+          cd assets
+          wget https://github.com/CollaboraOnline/online/releases/download/for-code-assets/core-co-24.04-assets.tar.gz
+          tar xvf core-co-24.04-assets.tar.gz
+          export LOCOREPATH=$(pwd)
+
+      - name: Build ${{ env.target }}
+        run: |
+          cd ${{ env.target }}
+          ./autogen.sh
+          ./configure --enable-silent-rules --with-lokit-path=${LOCOREPATH}/include --with-lo-path=${LOCOREPATH}/instdir --enable-cypress
+          make -j $(nproc)
+
+      - name: Check if ${{ env.target }} contains build files
+        run: |
+          du -sh ${{ env.target }}
+          ls -la ${{ env.target }}
+
+      - name: Archive ${{ env.target }}
+        continue-on-error: true
+        run: |
+          tar --totals -czf  ${{ env.target }}.tar.gz ${{ env.target }}
+
+      - name: 'Upload Artifact'
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ env.target }}
+          path: ${{ env.target }}.tar.gz
+
+      # - name: Upload files to a GitHub release
+      #   uses: svenstaro/upload-release-action@2.7.0
+      #   with:
+      #     file: "*.tar.gz"
+      #     overwrite: true
+      #     file_glob: true
+      #     release_name: android_libreoffice_core_${{ github.ref_name }}
+      #     body: "These are compiled ${{ env.co_repo }} ${{ github.ref_name }} for Android for 4 platforms: armeabi-v7a, arm64-v8a, x86, x86_64"
+      - run: echo "🍏 This job's status is ${{ job.status }}."
