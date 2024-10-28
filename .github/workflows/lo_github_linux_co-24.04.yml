@@ -45,7 +45,7 @@ jobs:
       image: klimarev/lo_base:latest
       options: --user ghactions
     env:
-      target: co_core_b2058994be677af10ba81b31f12f57aea7e2d3fe
+      target: co_core_f4e4fcac768a385b43b8d4dc0453ef8296a67f77
       co_repo: CollaboraOnline/online
     permissions:
       contents: write
@@ -57,7 +57,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           repository: ${{ env.co_repo }}
-          ref: b2058994be677af10ba81b31f12f57aea7e2d3fe
+          ref: f4e4fcac768a385b43b8d4dc0453ef8296a67f77
           submodules: 'recursive'
           path: './${{ env.target }}'
 
