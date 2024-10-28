@@ -28,6 +28,10 @@ pkg-config \
 fontconfig \
 snapd \
 chromium-browser \
+m4 \
+autotools-dev \
+automake \
+autoconf \
 && apt-get upgrade -y \
 && rm -rf /var/lib/apt/lists/* \
 && apt clean autoclean && apt autoremove -y
