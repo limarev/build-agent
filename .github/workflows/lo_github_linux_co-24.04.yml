@@ -77,13 +77,12 @@ jobs:
           cd assets
           wget https://github.com/CollaboraOnline/online/releases/download/for-code-assets/core-co-24.04-assets.tar.gz
           tar xvf core-co-24.04-assets.tar.gz
-          export LOCOREPATH=$(pwd)
 
       - name: Build ${{ env.target }}
         run: |
           cd ${{ env.target }}
           ./autogen.sh
-          ./configure --enable-silent-rules --with-lokit-path=${LOCOREPATH}/include --with-lo-path=${LOCOREPATH}/instdir --enable-cypress
+          ./configure --enable-silent-rules --with-lokit-path=${GITHUB_WORKSPACE}/assets/include --with-lo-path=${GITHUB_WORKSPACE}/assets/instdir --enable-cypress
           make -j $(nproc)
 
       - name: Check if ${{ env.target }} contains build files
