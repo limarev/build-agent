@@ -13,7 +13,8 @@ RUN apt-get update \
 dialog \
 libpoco-dev \
 python3-polib \
-libcap-dev npm \
+libcap-dev \
+npm \
 libpam-dev \
 libzstd-dev \
 wget \
