@@ -30,6 +30,7 @@ fontconfig \
 snapd \
 chromium-browser \
 m4 \
+rsync \
 autotools-dev \
 automake \
 autoconf \
