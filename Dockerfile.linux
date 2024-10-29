@@ -1,6 +1,6 @@
 # docker build --rm --progress=plain -t lo_reqs -f Dockerfile.linux
 
-FROM ubuntu:24.04 as libreoffice_requirements
+FROM ubuntu:24.10 as libreoffice_requirements
 
 ARG DEBIAN_FRONTEND=noninteractive
 ENV TZ=Europe/Moscow
