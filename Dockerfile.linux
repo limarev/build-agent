@@ -25,7 +25,7 @@ ca-certificates \
 
 RUN mkdir -p ${source_dir} \
  && curl -s -L https://github.com/pocoproject/poco/archive/refs/tags/poco-${poco_version}-release.tar.gz | tar xvzf - -C ${source_dir} --strip-components=1 \
- && cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=${install_dir} -S ${source_dir} -B build \
+ && cmake -DCMAKE_POSITION_INDEPENDENT_CODE=ON -DBUILD_SHARED_LIBS=OFF -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=${install_dir} -S ${source_dir} -B build \
  && cmake --build build \
  && cmake --install build
 
