@@ -1,6 +1,6 @@
 name: lo_github_linux_co-24.04
 
-run-name: Build Collabora Online release co-24.04 branch
+run-name: Build Collabora Online release master branch
 
 on:
   push:
@@ -45,7 +45,7 @@ jobs:
       image: klimarev/lo_base:latest
       options: --user ghactions
     env:
-      target: co_core_f4e4fcac768a385b43b8d4dc0453ef8296a67f77
+      target: co_core_ce908e99e2955a0d88d82a1a4ce55b0c2e325654
       co_repo: CollaboraOnline/online
     permissions:
       contents: write
@@ -54,7 +54,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           repository: ${{ env.co_repo }}
-          ref: f4e4fcac768a385b43b8d4dc0453ef8296a67f77
+          ref: ce908e99e2955a0d88d82a1a4ce55b0c2e325654
           submodules: 'recursive'
           path: './${{ env.target }}'
 
