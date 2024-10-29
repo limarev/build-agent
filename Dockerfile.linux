@@ -74,6 +74,9 @@ librsvg2-dev \
 && rm -rf /var/lib/apt/lists/* \
 && apt clean autoclean && apt autoremove -y
 
+RUN npm install -g n \
+ && n 14.0.0
+
 RUN addgroup --gid 1003 ghactions \
  && useradd --system --create-home --home-dir /home/ghactions --shell /bin/bash --gid 1003 --uid 1003 ghactions --password $(openssl passwd -1 ghactions)
 
