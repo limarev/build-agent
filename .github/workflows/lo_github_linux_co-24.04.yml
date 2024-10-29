@@ -82,7 +82,7 @@ jobs:
         run: |
           cd ${{ env.target }}
           ./autogen.sh
-          ./configure --prefix=${GITHUB_WORKSPACE}/install --enable-silent-rules --with-lokit-path=${GITHUB_WORKSPACE}/assets/include --with-lo-path=${GITHUB_WORKSPACE}/assets/instdir
+          ./configure --with-poco-includes=/opt/poco/include --with-poco-libs=/opt/poco/lib --prefix=${GITHUB_WORKSPACE}/install --enable-silent-rules --with-lokit-path=${GITHUB_WORKSPACE}/assets/include --with-lo-path=${GITHUB_WORKSPACE}/assets/instdir
           make -j $(nproc)
           make install
 

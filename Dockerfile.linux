@@ -1,6 +1,20 @@
 # docker build --rm --progress=plain -t lo_reqs -f Dockerfile.linux
 
-FROM ubuntu:24.10 as libreoffice_requirements
+FROM ubuntu:20.04 AS poco
+
+ARG repo_name=poco
+ARG source_dir=/tmp/${repo_name}
+ARG install_dir=/opt/${repo_name}
+ARG poco_version=1.13.3
+
+RUN mkdir -p ${source_dir} \
+ && curl -s -L https://github.com/pocoproject/poco/archive/refs/tags/poco-${poco_version}-release.tar.gz | tar xvzf - -C ${source_dir} --strip-components=1 \
+ && cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=${install_dir} -S ${source_dir} -B build \
+ && cmake --build build \
+ && cmake --install build
+
+
+FROM ubuntu:20.04 as libreoffice_requirements
 
 ARG DEBIAN_FRONTEND=noninteractive
 ENV TZ=Europe/Moscow
@@ -11,7 +25,6 @@ RUN apt-get update \
 --no-install-recommends \
 --fix-missing \
 dialog \
-libpoco-dev \
 python3-polib \
 libcap-dev \
 npm \
@@ -46,5 +59,7 @@ librsvg2-dev \
 
 RUN addgroup --gid 1003 ghactions \
  && useradd --system --create-home --home-dir /home/ghactions --shell /bin/bash --gid 1003 --uid 1003 ghactions --password $(openssl passwd -1 ghactions)
+
+COPY --from=poco /opt/poco /opt/poco
 
 USER ghactions
