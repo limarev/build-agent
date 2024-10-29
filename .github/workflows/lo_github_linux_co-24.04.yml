@@ -82,8 +82,14 @@ jobs:
         run: |
           cd ${{ env.target }}
           ./autogen.sh
-          ./configure --enable-silent-rules --with-lokit-path=${GITHUB_WORKSPACE}/assets/include --with-lo-path=${GITHUB_WORKSPACE}/assets/instdir --enable-cypress
+          ./configure --prefix=${GITHUB_WORKSPACE}/install --enable-silent-rules --with-lokit-path=${GITHUB_WORKSPACE}/assets/include --with-lo-path=${GITHUB_WORKSPACE}/assets/instdir --enable-cypress
           make -j $(nproc)
+          make install
+
+      - name: Check if ${GITHUB_WORKSPACE}/install contains build files
+        run: |
+          du -sh ${GITHUB_WORKSPACE}/install
+          ls -la ${GITHUB_WORKSPACE}/install
 
       - name: Check if ${{ env.target }} contains build files
         run: |
