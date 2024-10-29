@@ -71,7 +71,7 @@ jobs:
           echo "Current directory structure: $(ls -la)"
           echo "LibreOffice core directory size: $(du -sh ${{ env.target }})"
 
-      - name: Fetch tarballs ${{ env.target }}
+      - name: Fetch assets from https://github.com/CollaboraOnline/online/releases/download/for-code-assets/core-co-24.04-assets.tar.gz
         run: |
           mkdir assets
           cd assets
@@ -82,7 +82,7 @@ jobs:
         run: |
           cd ${{ env.target }}
           ./autogen.sh
-          ./configure --prefix=${GITHUB_WORKSPACE}/install --enable-silent-rules --with-lokit-path=${GITHUB_WORKSPACE}/assets/include --with-lo-path=${GITHUB_WORKSPACE}/assets/instdir --enable-cypress
+          ./configure --prefix=${GITHUB_WORKSPACE}/install --enable-silent-rules --with-lokit-path=${GITHUB_WORKSPACE}/assets/include --with-lo-path=${GITHUB_WORKSPACE}/assets/instdir
           make -j $(nproc)
           make install
 
@@ -99,7 +99,7 @@ jobs:
       - name: Archive ${{ env.target }}
         continue-on-error: true
         run: |
-          tar --totals -czf  ${{ env.target }}.tar.gz ${{ env.target }}
+          tar --totals -czf  ${{ env.target }}.tar.gz ${{ env.target }} assets
 
       - name: 'Upload Artifact'
         uses: actions/upload-artifact@v4
