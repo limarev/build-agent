@@ -59,6 +59,7 @@ fontconfig \
 snapd \
 chromium-browser \
 m4 \
+cpio \
 rsync \
 autotools-dev \
 automake \
