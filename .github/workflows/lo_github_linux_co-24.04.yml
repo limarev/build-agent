@@ -17,7 +17,7 @@ env:
 
 jobs:
   docker-image:
-        runs-on: ubuntu-latest
+        runs-on: self-hosted
 
         steps:
             - name: Checkout code
@@ -50,9 +50,6 @@ jobs:
     permissions:
       contents: write
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
       - name: Checkout ${{ env.co_repo }}
         uses: actions/checkout@v4
         with:

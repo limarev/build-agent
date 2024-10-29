@@ -1,11 +1,27 @@
 # docker build --rm --progress=plain -t lo_reqs -f Dockerfile.linux
 
-FROM ubuntu:20.04 AS poco
+FROM ubuntu:22.04 AS poco
 
 ARG repo_name=poco
 ARG source_dir=/tmp/${repo_name}
 ARG install_dir=/opt/${repo_name}
 ARG poco_version=1.13.3
+
+RUN apt-get update \
+&& apt-get install -y \
+--no-install-recommends \
+--fix-missing \
+g++ \
+make \
+cmake \
+libssl-dev \
+libmysqlclient-dev \
+libpq-dev \
+curl \
+ca-certificates \
+&& apt-get upgrade -y \
+&& rm -rf /var/lib/apt/lists/* \
+&& apt clean autoclean && apt autoremove -y
 
 RUN mkdir -p ${source_dir} \
  && curl -s -L https://github.com/pocoproject/poco/archive/refs/tags/poco-${poco_version}-release.tar.gz | tar xvzf - -C ${source_dir} --strip-components=1 \
@@ -14,7 +30,7 @@ RUN mkdir -p ${source_dir} \
  && cmake --install build
 
 
-FROM ubuntu:20.04 as libreoffice_requirements
+FROM ubuntu:22.04
 
 ARG DEBIAN_FRONTEND=noninteractive
 ENV TZ=Europe/Moscow
