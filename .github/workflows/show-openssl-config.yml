@@ -1,0 +1,16 @@
+name: Show OpenSSL CMake config (vcpkg)
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - ".github/workflows/show-openssl-config.yml"
+
+jobs:
+  show-openssl-config:
+    runs-on: windows-latest
+    steps:
+      - name: Fetch & bootstrap vcpkg
+        shell: pwsh
+        run: |
+          vcpkg install openssl:x64-windows-release
