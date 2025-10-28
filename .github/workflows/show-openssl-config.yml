@@ -13,4 +13,5 @@ jobs:
       - name: Fetch & bootstrap vcpkg
         shell: pwsh
         run: |
-          vcpkg install openssl:x64-windows-release
+          vcpkg install openssl:x64-windows-release --x-install-root=.
+          Get-ChildItem -Force -Recurse
